@@ -1,0 +1,59 @@
+nacos_host: "${nacos_host}"
+nacos_namespace: "${nacos_namespace}"
+logging_path: "${logging_path}"
+#目前文件配置中心zuul不可以用，具体问题还没找到
+server:
+  port: 17001
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: love-app-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: "${nacos_host}"
+        namespace: "${nacos_namespace}"
+        metadata:
+          version: ${system.version}
+      config:
+        server-addr: "${nacos_host}"
+        namespace: "${nacos_namespace}"
+        file-extension: yaml #指定yaml格式的配置
+        group: DEFAULT_GROUP
+        prefix: ${spring.application.name}
+        #共享配置文件，多个英文逗号分隔
+        #shared-dataids: redis.yml
+    #sentinel:
+      #transport:
+        #dashboard: localhost:8080  #sentinel地址
+      #动态共享配置文件
+        #refreshable-dataids: shareconfig1.yml,shareconfig2.yml
+        #不是默认DEFAULT_GROUP的配置文件
+        #ext-config:
+          #- data-id: shareconfig3.yml
+            #group: SHARE3_GROUP
+            #refresh: true
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      enabled: true # 启用上传处理，默认是true
+      file-size-threshold: 1MB # 当上传文件达到1MB的时候进行磁盘写入
+      max-request-size: 100MB # 设置最大的请求文件的大小
+      max-file-size: 20MB # 设置单个文件的最大长度
+
+ribbon:
+  ReadTimeout: 600000
+  ConnectTimeout: 6000000
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 60000 # 连接超时时间
+        readTimeout: 60000   # 读超时时间
+        #loggerLevel: full # 日志级别  full | basic | none | headers
+logging:
+  config: classpath:config/logback-spring.xml
+  # 日志打印根目录
+  path: "${logging_path}"

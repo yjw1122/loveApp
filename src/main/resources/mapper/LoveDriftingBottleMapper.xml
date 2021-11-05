@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.love.appserver.mapper.LoveDriftingBottleMapper">
+    <!--字段映射-->
+	<resultMap id="BaseResultMap" type="com.love.appserver.dao.AUserinfoDo">
+		<id column="ID" property="id" />
+		<result column="NAME" property="name" />
+		<result column="AGE" property="age" />
+		<result column="SEX" property="sex" />
+	</resultMap>
+	<!--插入语句-->
+	<!--id要与LoveDriftingBottleMapper文件中表示插入的函数名一致，parameterType表示函数的输入参数的类型-->
+	<insert id="insert_student" parameterType="com.love.appserver.dao.AUserinfoDo">
+		insert into A_USERINFO(id,name,age,sex)values(#{id,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{age,jdbcType=INTEGER},#{sex,jdbcType=VARCHAR})/*SQL语句*/
+	</insert>
+
+	<!--删除语句-->
+	<delete id="delete_student" parameterType="java.lang.Integer">
+		delete from A_USERINFO where id =#{id,jdbcType=INTEGER}
+	</delete>
+
+	<!--查找语句-->
+	<!--resultMap表示函数返回的类型-->
+	<select id="select_userInfo" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from A_USERINFO where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!--查找语句-->
+	<select id="select_all_userInfo" resultMap="BaseResultMap">
+		select * from A_USERINFO
+	</select>
+
+	<!--修改语句-->
+	<update id="update_student" parameterType="com.love.appserver.dao.AUserinfoDo">
+		update A_USERINFO set name=#{name,jdbcType=VARCHAR},age=#{age,jdbcType=INTEGER} where id=#{id,jdbcType=INTEGER}
+	</update>
+</mapper>
